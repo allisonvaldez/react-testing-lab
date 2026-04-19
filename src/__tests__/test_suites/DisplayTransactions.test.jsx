@@ -1,4 +1,4 @@
-// Import necessary components, render, screen, waitFor, describe, it, exspect, beforeEach
+// Import necessary testing tools and components
 import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, beforeEach } from "vitest";
 import App from "../../components/App";

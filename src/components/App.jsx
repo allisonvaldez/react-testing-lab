@@ -1,3 +1,4 @@
+// Import components 
 import React from "react";
 import AccountContainer from "./AccountContainer";
 
@@ -12,4 +13,5 @@ function App() {
   );
 }
 
+// Make avaialbale globally
 export default App;

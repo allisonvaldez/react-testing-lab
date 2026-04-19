@@ -1,6 +1,7 @@
+// Import react
 import React from "react";
 
-function Search({setSearch}) {
+function Search({ setSearch }) {
   return (
     <div className="ui large fluid icon input">
       <input
@@ -13,4 +14,5 @@ function Search({setSearch}) {
   );
 }
 
+// Make available globally
 export default Search;

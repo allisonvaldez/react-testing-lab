@@ -1,19 +1,19 @@
-// Import necessary components, render, screen, fireEvent, waitFor, describe, it, exspect, beforeEach
+// Import necessary testing tools and components
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import App from "../../components/App";
 
-// Test suite to add new transactions
+// Test suite for adding new transactions
 describe("Add Transactions", () => {
 
-    // Mock fetch response before each test
+    // Set up mock fetch response before each test
     beforeEach(() => {
         global.setFetchResponse([
             { id: 1, date: "2024-01-01", description: "Coffee", category: "Food", amount: 5.00 }
         ]);
     });
 
-    // Test if a transaction is added to the frontend after form submission
+    // Test that a new transaction is added to the frontend after form submission
     it("adds a new transaction to the frontend", async () => {
         render(<App />);
 
@@ -22,16 +22,18 @@ describe("Add Transactions", () => {
             expect(screen.getByText("Coffee")).toBeInTheDocument();
         });
 
-        // Mock fetch new transaction on POST
+        // Mock fetch to return the new transaction on POST
         global.setFetchResponse(
             { id: 2, date: "2024-01-03", description: "Books", category: "Education", amount: 20.00 }
         );
 
-        // Fill out and submit the form
+        // Fill out all form fields including date
         fireEvent.change(screen.getByPlaceholderText("Description"), { target: { value: "Books" } });
         fireEvent.change(screen.getByPlaceholderText("Category"), { target: { value: "Education" } });
         fireEvent.change(screen.getByPlaceholderText("Amount"), { target: { value: "20.00" } });
-        fireEvent.click(screen.getByText("Add Transaction"));
+
+        // Submit the form directly
+        fireEvent.submit(screen.getByRole("button", { name: "Add Transaction" }).closest("form"));
 
         // Verify the new transaction appears on the page
         await waitFor(() => {
@@ -39,7 +41,7 @@ describe("Add Transactions", () => {
         });
     });
 
-    // Test if POST request was called when submitting the form
+    // Test that the POST request was called when submitting the form
     it("calls the POST request when form is submitted", async () => {
         render(<App />);
 
@@ -48,14 +50,18 @@ describe("Add Transactions", () => {
             expect(screen.getByText("Coffee")).toBeInTheDocument();
         });
 
-        // Mock fetch for POST
+        // Mock fetch for the POST before submitting
         global.setFetchResponse(
             { id: 2, date: "2024-01-03", description: "Books", category: "Education", amount: 20.00 }
         );
 
-        // Submit the form
+        // Fill out all required fields
         fireEvent.change(screen.getByPlaceholderText("Description"), { target: { value: "Books" } });
-        fireEvent.click(screen.getByText("Add Transaction"));
+        fireEvent.change(screen.getByPlaceholderText("Category"), { target: { value: "Education" } });
+        fireEvent.change(screen.getByPlaceholderText("Amount"), { target: { value: "20.00" } });
+
+        // Submit the form directly
+        fireEvent.submit(screen.getByRole("button", { name: "Add Transaction" }).closest("form"));
 
         // Verify fetch was called with POST method
         await waitFor(() => {
